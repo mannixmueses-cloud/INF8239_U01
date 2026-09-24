@@ -95,10 +95,3 @@ Resultado esperado: todas las pruebas aprobadas.
 | La exactitud es alta pero la clase minoritaria falla | Revisa F1 macro, recall y la matriz de confusión. |
 | Los resultados cambian entre ejecuciones | Fija `random_state` y registra las versiones de las librerías. |
 
-## Evidencias a entregar
-
-- [ ] Notebook ejecutado de inicio a fin.
-- [ ] Línea base y SVM comparadas.
-- [ ] Tabla de `GridSearchCV`.
-- [ ] Matriz de confusión interpretada.
-- [ ] CSV, modelo, pruebas y commit.
