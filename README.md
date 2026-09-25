@@ -120,31 +120,23 @@ hacia `<=50K`).
 Este laboratorio permitió llevar el pipeline de clasificación con SVM del
 LAB01 —construido sobre un dataset guiado y ya limpio— a un escenario más
 realista: elegir, justificar, descargar y auditar un dataset público desde
-cero. El proceso de selección resultó tan formativo como el modelado en sí.
-Evaluar candidatos de UCI y Kaggle bajo criterios explícitos (tamaño mínimo,
-target observable con al menos dos clases, licencia compatible con uso
-académico, disponibilidad de variables al momento de predecir y compatibilidad
-con recursos gratuitos) obligó a pensar en el dataset no solo como una tabla
-de números, sino como el resultado de un proceso de recolección con su propio
-contexto, limitaciones y riesgos.
+cero. El dataset elegido fue Adult Census Income, publicado en Kaggle por
+UCI Machine Learning, cuya tarea es predecir si el ingreso anual de una
+persona supera los 50 000 USD a partir de variables demográficas y laborales
+del censo de 1994 de Estados Unidos. Se validó que cumplía los criterios de
+aceptación del laboratorio: más de 30 000 filas, un target binario
+(`income`) con clases claramente observables, y una licencia CC BY 4.0 que
+permite su uso académico con atribución.
 
-El primer candidato considerado (Breast Cancer Wisconsin) tuvo que
-descartarse por haber sido elegido ya por otro compañero, lo que reforzó la
-importancia de verificar la disponibilidad de un dataset antes de invertir
-tiempo en su auditoría. El dataset finalmente elegido, Adult Census Income,
-resultó adecuado: más de 30 000 filas, target binario (`income`) con clases
-observables y una licencia CC BY 4.0 que permite su uso académico con
-atribución.
-
-Encapsular la descarga en `src/inf8239_u01/data.py`, en vez de depender de una
-ruta local o de una carpeta de Google Drive, fue uno de los aprendizajes más
-prácticos del laboratorio. El primer intento, usando una URL directa de la
+Encapsular la descarga en `src/inf8239_u01/data.py`, en vez de depender de
+una ruta local o de una carpeta de Google Drive, fue uno de los aprendizajes
+más prácticos del proceso. El primer intento, usando una URL directa de la
 ficha de Kaggle con `pd.read_csv`, falló porque Kaggle no permite descargas
-directas sin pasar por su API. Resolverlo implicó entender la diferencia
-entre `kagglehub` (que sí permite descargar datasets públicos sin
-credenciales) y la API oficial de `kaggle` (que las exige siempre), y ajustar
-la función para que el archivo quedara reproduciblemente ubicado en
-`data/raw`, sin rutas absolutas de una máquina en particular.
+directas de esa forma. Resolverlo implicó entender la diferencia entre
+`kagglehub` (que sí permite descargar datasets públicos sin credenciales) y
+la API oficial de `kaggle` (que siempre las exige), y ajustar la función para
+que el archivo quedara reproduciblemente ubicado en `data/raw`, sin rutas
+absolutas ni dependencias de una máquina en particular.
 
 La auditoría del dataset —tipos de dato, valores ausentes, duplicados y
 balance de clases— confirmó que `income` está desbalanceado hacia la clase
@@ -152,16 +144,20 @@ balance de clases— confirmó que `income` está desbalanceado hacia la clase
 accuracy, ya que esta última puede resultar engañosamente alta si el modelo
 simplemente predice siempre la clase mayoritaria. Comparar la SVM contra un
 `DummyClassifier` como línea base permitió confirmar que el modelo aprende
-algo más que el patrón trivial del desbalance.
+un patrón real y no solo repite la clase dominante del desbalance.
 
-Encapsular el preprocesamiento (imputación, escalado, codificación one-hot)
-dentro de un `ColumnTransformer` integrado al `Pipeline`, en vez de aplicarlo
-directamente sobre el DataFrame completo, fue clave para evitar fugas de
-información: el ajuste de esas transformaciones ocurre únicamente sobre el
-conjunto de entrenamiento, replicando lo que pasaría en un escenario de
-producción donde los datos de prueba (o futuros) son verdaderamente
-desconocidos al momento de entrenar. En conjunto, el laboratorio deja como
-aprendizaje central que la calidad de un modelo depende tanto de las
-decisiones tomadas *antes* de tocar el algoritmo —selección, licencia,
+Definir el target y evaluar posibles fugas de información también resultó
+relevante para este dataset en particular: variables como `fnlwgt` (un peso
+muestral del censo, no una característica real de la persona) y la
+redundancia entre `education` y `education-num` obligaron a pensar qué
+información está legítimamente disponible al momento de predecir, en lugar
+de incluir todo lo que mejora la métrica sin justificación. Encapsular el
+preprocesamiento (imputación, escalado, codificación one-hot) dentro de un
+`ColumnTransformer` integrado al `Pipeline`, en vez de aplicarlo directamente
+sobre el DataFrame completo, evitó fugas de información adicionales, ya que
+el ajuste de esas transformaciones ocurre únicamente sobre el conjunto de
+entrenamiento. En conjunto, el laboratorio deja como aprendizaje central que
+la calidad de un modelo sobre Adult Census Income depende tanto de las
+decisiones tomadas antes de tocar el algoritmo —procedencia, licencia,
 definición de target, tratamiento de fugas— como del ajuste de
 hiperparámetros en sí.
