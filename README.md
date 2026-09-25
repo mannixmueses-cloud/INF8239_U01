@@ -1,97 +1,121 @@
-# LAB01: SVM con Pipeline sobre Breast Cancer Wisconsin
+# INF8239_U01 · LAB01 + LAB02 — SVM sobre Adult Census Income
 
-Laboratorio guiado que construye un clasificador SVM de forma correcta, sin fuga de información, y lo deja reproducible, probado y versionado. LAB01 no se califica por separado: prepara el método que se exigirá en el Ejercicio 01.
+Proyecto de la asignatura INF-8239 Ciencia de Datos II, Unidad 01. Este
+repositorio contiene las evidencias del **Ejercicio 01**, que combina:
 
-## Objetivo
+- **LAB01**: SVM con pipeline, búsqueda de parámetros y evaluación (dataset guiado).
+- **LAB02**: Búsqueda, selección y auditoría de un dataset público propio, y
+  adaptación del pipeline del LAB01 a variables reales.
 
-Clasificar tumores como malignos (0) o benignos (1) con el dataset *Breast Cancer Wisconsin* de `scikit-learn` (569 filas, 30 predictores numéricos, dos clases). El foco no es el modelo en sí, sino el método:
+## Dataset
 
-- Auditar los datos antes de modelar.
-- Reservar el conjunto de prueba antes de cualquier transformación.
-- Comparar contra una línea base.
-- Ajustar hiperparámetros solo con validación cruzada.
-- Guardar resultados y probar el código reutilizable.
+- **Nombre:** Adult Census Income
+- **Fuente:** Kaggle — [uciml/adult-census-income](https://www.kaggle.com/datasets/uciml/adult-census-income)
+- **Ficha original (documentación):** [UCI Machine Learning Repository — Adult](https://archive.ics.uci.edu/dataset/2/adult)
+- **Licencia:** CC BY 4.0 (según la ficha de UCI)
+- **Tarea:** Clasificación binaria — predecir si el ingreso anual de una
+  persona supera los 50 000 USD.
+- **Target:** `income` (`<=50K` / `>50K`)
+- **Ficha completa de procedencia, comparación de candidatos y criterios de
+  aceptación:** [`docs/ficha_dataset.md`](docs/ficha_dataset.md)
 
 ## Estructura del proyecto
 
 ```
-.
+INF8239_U01/
+├── .kaggle/
+│   └── kaggle.json                # credenciales locales (no versionado)
+├── .pytest_cache/
+├── .venv/
+├── data/
+│   └── raw/                       # datasets descargados (no versionado)
+├── docs/
+│   └── ficha_dataset.md           # ficha de procedencia y comparación de candidatos
+├── notebooks/
+│   ├── 00_verificacion.ipynb
+│   ├── 01_svm_guiada.ipynb        # LAB01
+│   └── 02_svm_uci.ipynb           # LAB02
+├── reports/
+│   ├── svm_best.joblib            # mejor modelo entrenado
+│   └── svm_cv_results.csv         # resultados de validación cruzada
 ├── src/
 │   └── inf8239_u01/
-│       └── models.py          # build_svm(): pipeline reutilizable
+│       ├── __pycache__/
+│       ├── __init__.py
+│       ├── data.py                # descarga reproducible del dataset
+│       ├── environment.py
+│       └── models.py              # construcción del pipeline SVM
 ├── tests/
-│   └── test_models.py         # pruebas de pytest
-├── reports/
-│   ├── svm_cv_results.csv     # tabla de GridSearchCV
-│   └── svm_best.joblib        # mejor modelo entrenado
-└── README.md
+│   ├── test_models.py
+│   └── test_data_contract.py      # contrato mínimo del dataset (LAB02)
+├── .gitignore
+├── README.md
+└── requirements.txt
 ```
 
-## Requisitos
+## Instalación
 
-Python 3 con `pandas`, `scikit-learn`, `matplotlib`, `joblib` y `pytest`. Registra las versiones usadas para poder reproducir los resultados.
+```bash
+python -m venv .venv
+.venv\Scripts\activate      # Windows
+# source .venv/bin/activate # Linux/Mac
 
-## Flujo del laboratorio
-
-### 1. Importar y cargar los datos
-Carga el dataset con `load_breast_cancer(as_frame=True)`. Genera `X` (DataFrame de 569 filas y 30 predictores) e `y` (Series binaria: 0 = maligno, 1 = benigno), e imprime la forma de `X` y la distribución de clases.
-
-### 2. Auditar antes de modelar
-Construye una tabla `audit` con el tipo, los ausentes y los valores únicos de cada columna, cuenta los duplicados y confirma que el target no está dentro de `X`. El balance es de 212 malignos y 357 benignos (cerca de 37 % y 63 %), un desbalance moderado. Esta etapa no elimina filas ni columnas: cualquier eliminación posterior debe justificarse con un hallazgo concreto.
-
-### 3. Reservar prueba
-`train_test_split` con `test_size=0.20`, `random_state=42` y `stratify=y`. Se esperan 455 filas de entrenamiento y 114 de prueba, con proporciones de clase muy parecidas en ambos conjuntos. **No se ajusta `StandardScaler` antes de esta división.**
-
-### 4. Crear una línea base
-`DummyClassifier(strategy="most_frequent")` evaluado con F1 macro. Predice siempre "benigno", por lo que el F1 macro esperado ronda 0.39. Es el piso que cualquier modelo debe superar con claridad.
-
-### 5. Construir la SVM correctamente
-Un `Pipeline` con `StandardScaler` y `SVC` (kernel `rbf`, `C=1`, `gamma="scale"`, `probability=True`, `random_state=42`). Al ir dentro del pipeline, el escalador se ajusta solo con el entrenamiento.
-
-### 6. Evaluar la configuración base
-Reporte de clasificación, ROC-AUC y matriz de confusión sobre el conjunto de prueba. Con la clase 1 (benigno) como positiva:
-
-- **Falso positivo:** un tumor maligno clasificado como benigno.
-- **Falso negativo:** un tumor benigno clasificado como maligno.
-
-Aquí el falso positivo es el error más costoso, porque puede retrasar un diagnóstico. Además de la exactitud, conviene revisar el recall de la clase maligna. Los hiperparámetros no deben elegirse mirando esta matriz repetidamente.
-
-### 7. Buscar C y gamma dentro del pipeline
-`GridSearchCV` con `StratifiedKFold` de 5 particiones, métrica `f1_macro` y la rejilla `model__C` en [0.1, 1, 10] y `model__gamma` en ["scale", 0.01, 0.1]. Son 9 combinaciones, 45 ajustes. El prefijo `model__` es necesario porque el `SVC` está dentro del pipeline. Solo usa datos de entrenamiento.
-
-### 8. Comparar sin ocultar variación
-Tabla de `cv_results_` ordenada por puntaje medio, con su desviación estándar y el tiempo de ajuste. Si dos combinaciones difieren menos que su desviación estándar, no se puede afirmar que una sea mejor. El mejor estimador se evalúa después en el conjunto de prueba y se compara con la SVM base.
-
-### 9. Llevar código reutilizable a `src`
-`build_svm(C=1.0, gamma="scale")` en `src/inf8239_u01/models.py` devuelve el pipeline sin ajustar y lanza `ValueError` si `C` no es positivo. Evita duplicar la construcción del modelo en el notebook.
-
-### 10. Añadir pruebas
-`tests/test_models.py` verifica tres cosas:
-
-- El modelo devuelve una predicción por cada fila de prueba.
-- `build_svm(C=0)` lanza `ValueError`.
-- El pipeline contiene exactamente los pasos `["scale", "model"]`.
-
-### 11. Guardar resultados y versionar
-Crea `reports/` y guarda la tabla comparativa en `reports/svm_cv_results.csv` y el mejor pipeline en `reports/svm_best.joblib`, que se recarga con `joblib.load`. Revisa el tamaño del `.joblib` antes de subirlo al repositorio.
-
-## Cómo ejecutar las pruebas
-
-En PowerShell, desde la raíz del proyecto:
-
-```powershell
-$env:PYTHONPATH="src"
-python -m pytest -q
+pip install -r requirements.txt
+pip install -e .             # instala el paquete src en modo editable
 ```
 
-Resultado esperado: todas las pruebas aprobadas.
+## Descarga del dataset
 
-## Errores frecuentes
+La descarga es reproducible y no depende de rutas locales ni de Google Drive.
+Se encapsula en `src/inf8239_u01/data.py`:
 
-| Situación | Corrección |
-|---|---|
-| El escalado ocurre antes del split | Elimina ese escalado y usa `Pipeline`. |
-| `GridSearchCV` no reconoce `C` | Usa `model__C`, porque el estimador está dentro del pipeline. |
-| La exactitud es alta pero la clase minoritaria falla | Revisa F1 macro, recall y la matriz de confusión. |
-| Los resultados cambian entre ejecuciones | Fija `random_state` y registra las versiones de las librerías. |
+```python
+from src.inf8239_u01.data import get_adult_census_data
 
+csv_path = get_adult_census_data()
+print(csv_path)  # data/raw/adult.csv
+```
+
+El dataset se descarga automáticamente vía [`kagglehub`](https://pypi.org/project/kagglehub/)
+(no requiere credenciales de Kaggle para este dataset público) y se copia a
+`data/raw/`.
+
+## Ejecución
+
+1. Ejecutar `notebooks/02_svm_uci.ipynb` de principio a fin. El notebook:
+   - descarga el dataset con `get_adult_census_data()`
+   - carga el CSV y reconoce su esquema (`shape`, `dtypes`, `head`, `tail`)
+   - audita tipos, ausentes, porcentaje de ausentes y duplicados
+   - define el target (`income`) y retira columnas de fuga si aplica
+   - separa variables numéricas/categóricas y arma el preprocesamiento
+     (`ColumnTransformer` con imputación, escalado y one-hot encoding)
+   - divide en entrenamiento/prueba (80/20, estratificado, `random_state=42`)
+   - entrena un `DummyClassifier` (línea base) y una `SVC` dentro de un `Pipeline`
+   - reporta F1 macro y `classification_report` de ambos modelos
+
+2. Correr las pruebas del dataset:
+```bash
+   $env:PYTHONPATH="src"
+   python -m pytest -q
+```
+
+## Métrica
+
+Se usa **F1 macro** como métrica principal de comparación entre el modelo
+`dummy` (línea base) y la `SVM`, por tratarse de un problema de clasificación
+binaria con clases desbalanceadas (`income` tiene una proporción marcada
+hacia `<=50K`).
+
+## Evidencias
+
+- Ficha de procedencia/licencia: [`docs/ficha_dataset.md`](docs/ficha_dataset.md)
+- Diccionario de datos: incluido en `docs/ficha_dataset.md`
+- Notebook completo: [`notebooks/02_svm_uci.ipynb`](notebooks/02_svm_uci.ipynb)
+- Pruebas del contrato de datos: [`tests/test_data_contract.py`](tests/test_data_contract.py)
+- Resultados de validación cruzada: [`reports/svm_cv_results.csv`](reports/svm_cv_results.csv)
+- Modelo entrenado: [`reports/svm_best.joblib`](reports/svm_best.joblib)
+
+## Notas de seguridad
+
+El archivo `.kaggle/kaggle.json` contiene credenciales personales y **no debe
+subirse al repositorio**. Está excluido vía `.gitignore`.

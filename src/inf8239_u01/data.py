@@ -1,44 +1,50 @@
-"""Descarga y almacenamiento reproducible de datasets de UCI."""
-
+import shutil
 from pathlib import Path
 
-import pandas as pd
-from ucimlrepo import fetch_ucirepo
+import kagglehub
+
+# Ruta al directorio raíz del proyecto (src/inf8239_u01/data.py -> raíz)
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+RAW_DATA_DIR = PROJECT_ROOT / "data" / "raw"
+
+ADULT_CENSUS_SLUG = "uciml/adult-census-income"
 
 
-def download_uci_dataset(
-    dataset_id: int = 545,
-    destination: str = "data/raw/rice.csv"
-) -> Path:
-    """Descarga un dataset de UCI y lo guarda como CSV."""
+def download_kaggle_dataset(dataset_slug: str, dest_dir: Path = RAW_DATA_DIR) -> Path:
+    """
+    Descarga un dataset público de Kaggle y deja el CSV directamente en dest_dir.
 
-    if not isinstance(dataset_id, int) or dataset_id <= 0:
-        raise ValueError("dataset_id debe ser un entero positivo")
+    Parameters
+    ----------
+    dataset_slug : str
+        Identificador del dataset en Kaggle, formato "usuario/nombre-dataset".
+    dest_dir : Path
+        Carpeta donde quedará el archivo .csv. Por defecto, data/raw en la
+        raíz del proyecto.
 
-    dataset = fetch_ucirepo(id=dataset_id)
+    Returns
+    -------
+    Path
+        Ruta al archivo .csv dentro de dest_dir.
+    """
+    cache_path = Path(kagglehub.dataset_download(dataset_slug))
+    dest_dir.mkdir(parents=True, exist_ok=True)
 
-    features = dataset.data.features.copy()
-    targets = dataset.data.targets.copy()
+    csv_source = next(cache_path.glob("*.csv"))
+    csv_dest = dest_dir / csv_source.name
+    shutil.copy2(csv_source, csv_dest)
 
-    if features.empty:
-        raise ValueError("El dataset no contiene predictores")
+    return csv_dest
 
-    if targets.empty:
-        raise ValueError("El dataset no contiene target")
 
-    frame = pd.concat(
-        [
-            features.reset_index(drop=True),
-            targets.reset_index(drop=True)
-        ],
-        axis=1
-    )
+def get_adult_census_data() -> Path:
+    """
+    Descarga (si hace falta) el dataset Adult Census Income y devuelve
+    la ruta al CSV en data/raw.
 
-    if frame.empty:
-        raise ValueError("El dataset descargado está vacío")
-
-    path = Path(destination)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    frame.to_csv(path, index=False)
-
-    return path
+    Returns
+    -------
+    Path
+        Ruta al archivo .csv.
+    """
+    return download_kaggle_dataset(ADULT_CENSUS_SLUG)
