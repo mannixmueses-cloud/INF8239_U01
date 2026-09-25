@@ -115,7 +115,3 @@ hacia `<=50K`).
 - Resultados de validación cruzada: [`reports/svm_cv_results.csv`](reports/svm_cv_results.csv)
 - Modelo entrenado: [`reports/svm_best.joblib`](reports/svm_best.joblib)
 
-## Notas de seguridad
-
-El archivo `.kaggle/kaggle.json` contiene credenciales personales y **no debe
-subirse al repositorio**. Está excluido vía `.gitignore`.
