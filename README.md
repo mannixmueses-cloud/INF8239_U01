@@ -1,11 +1,13 @@
-# INF8239_U01 · LAB01 + LAB02 — SVM sobre Adult Census Income
+# INF8239_U01 · LAB01 + LAB02 + LAB03 — SVM, Ensambles y Green AI sobre Adult Census Income
 
 Proyecto de la asignatura INF-8239 Ciencia de Datos II, Unidad 01. Este
-repositorio contiene las evidencias del **Ejercicio 01**, que combina:
+repositorio contiene las evidencias de los ejercicios de la unidad:
 
 - **LAB01**: SVM con pipeline, búsqueda de parámetros y evaluación (dataset guiado).
-- **LAB02**: Búsqueda, selección y auditoría de un dataset público propio, y
+- **LAB02 (Ejercicio 01)**: Búsqueda, selección y auditoría de un dataset público propio, y
   adaptación del pipeline del LAB01 a variables reales.
+- **LAB03 (Ejercicio 02)**: Ensambles, reducción dimensional (PCA, t-SNE),
+  mediciones repetidas y selección bajo criterio Green AI.
 
 ## Dataset
 
@@ -16,6 +18,8 @@ repositorio contiene las evidencias del **Ejercicio 01**, que combina:
 - **Tarea:** Clasificación binaria — predecir si el ingreso anual de una
   persona supera los 50 000 USD.
 - **Target:** `income` (`<=50K` / `>50K`)
+- **Partición:** 80/20, estratificada, `random_state=42` (misma para
+  LAB02 y LAB03, sin modificar para favorecer ningún modelo)
 - **Ficha completa de procedencia, comparación de candidatos y criterios de
   aceptación:** [`docs/ficha_dataset.md`](docs/ficha_dataset.md)
 
@@ -24,30 +28,44 @@ repositorio contiene las evidencias del **Ejercicio 01**, que combina:
 ```
 INF8239_U01/
 ├── .kaggle/
-│   └── kaggle.json                # credenciales locales (no versionado)
+│   └── kaggle.json                 # credenciales locales (no versionado)
 ├── .pytest_cache/
 ├── .venv/
 ├── data/
-│   └── raw/                       # datasets descargados (no versionado)
+│   └── raw/
+│       └── adult.csv               # dataset descargado (no versionado)
 ├── docs/
-│   └── ficha_dataset.md           # ficha de procedencia y comparación de candidatos
+│   └── ficha_dataset.md            # ficha de procedencia y comparación de candidatos
 ├── notebooks/
 │   ├── 00_verificacion.ipynb
-│   ├── 01_svm_guiada.ipynb        # LAB01
-│   └── 02_svm_uci.ipynb           # LAB02
+│   ├── 01_svm_guiada.ipynb         # LAB01
+│   ├── 02_svm_uci.ipynb            # LAB02 / Ejercicio 01
+│   └── 03_ensambles_green_ai.ipynb # LAB03 / Ejercicio 02
 ├── reports/
-│   ├── svm_best.joblib            # mejor modelo entrenado
-│   └── svm_cv_results.csv         # resultados de validación cruzada
+│   ├── models/                     # modelos serializados por configuración
+│   │   ├── logistic.joblib
+│   │   ├── svm_c1.joblib
+│   │   ├── svm_c10.joblib
+│   │   ├── rf_100.joblib
+│   │   ├── rf_300.joblib
+│   │   └── boost.joblib
+│   ├── svm_best.joblib             # mejor modelo del LAB02
+│   ├── svm_cv_results.csv          # validación cruzada del LAB02
+│   ├── green_ai_results.csv        # tabla comparativa y frontera de Pareto (LAB03)
+│   ├── tsne_two_seeds.png          # mapas t-SNE con dos semillas (LAB03)
+│   └── pareto.png                  # gráfico de rendimiento vs. costo (LAB03)
 ├── src/
 │   └── inf8239_u01/
 │       ├── __pycache__/
 │       ├── __init__.py
-│       ├── data.py                # descarga reproducible del dataset
+│       ├── data.py                 # descarga reproducible del dataset
 │       ├── environment.py
-│       └── models.py              # construcción del pipeline SVM
+│       ├── green.py                # función pareto_flags (LAB03)
+│       └── models.py               # construcción del pipeline SVM
 ├── tests/
 │   ├── test_models.py
-│   └── test_data_contract.py      # contrato mínimo del dataset (LAB02)
+│   ├── test_data_contract.py       # contrato mínimo del dataset (LAB02)
+│   └── test_green.py               # pruebas de pareto_flags (LAB03)
 ├── .gitignore
 ├── README.md
 └── requirements.txt
@@ -80,7 +98,7 @@ El dataset se descarga automáticamente vía [`kagglehub`](https://pypi.org/proj
 (no requiere credenciales de Kaggle para este dataset público) y se copia a
 `data/raw/`.
 
-## Ejecución
+## Ejercicio 01 (LAB02) — Ejecución
 
 1. Ejecutar `notebooks/02_svm_uci.ipynb` de principio a fin. El notebook:
    - descarga el dataset con `get_adult_census_data()`
@@ -99,65 +117,132 @@ El dataset se descarga automáticamente vía [`kagglehub`](https://pypi.org/proj
    python -m pytest -q
 ```
 
-## Métrica
+### Métrica (Ejercicio 01)
 
 Se usa **F1 macro** como métrica principal de comparación entre el modelo
 `dummy` (línea base) y la `SVM`, por tratarse de un problema de clasificación
 binaria con clases desbalanceadas (`income` tiene una proporción marcada
 hacia `<=50K`).
 
+## Ejercicio 02 (LAB03) — Ensambles, reducción dimensional y Green AI
+
+Extiende el Ejercicio 01 sobre el mismo dataset, target y partición,
+comparando seis configuraciones de modelos bajo un criterio de
+costo-beneficio (Green AI).
+
+### Catálogo de modelos comparados
+
+| Modelo | Tipo | F1 macro | Mediana ajuste | Predicción | Tamaño |
+|---|---|---|---|---|---|
+| `boost` | HistGradientBoosting | **0.8122** | 2.75 s | 116.9 ms | 364.0 KB |
+| `logistic` | Regresión logística | 0.7875 | 1.62 s | 38.1 ms | 8.0 KB |
+| `svm_c10` | SVM (C=10) | 0.7859 | 610.85 s | 13 672 ms | 7 746.5 KB |
+| `svm_c1` | SVM (C=1) | 0.7835 | 375.42 s | 11 843 ms | 7 603.7 KB |
+| `rf_100` | Random Forest (100 árboles) | 0.7695 | 2.97 s | 119.3 ms | 2 070.6 KB |
+| `rf_300` | Random Forest (300 árboles) | 0.7686 | 8.22 s | 261.7 ms | 6 085.6 KB |
+
+### Reducción dimensional
+
+- **PCA** sobre las variables preprocesadas retiene **32 componentes**
+  para explicar el 95% de la varianza.
+- **t-SNE** con dos semillas distintas (42 y 7) sobre una muestra de 1000
+  filas de variables numéricas, para verificar la estabilidad visual de
+  los clusters frente al cambio de semilla.
+
+### Ejecución (Ejercicio 02)
+
+1. Ejecutar `notebooks/03_ensambles_green_ai.ipynb` de principio a fin
+   (`Restart` + `Run All` recomendado, para evitar estados intermedios
+   inconsistentes entre celdas). El notebook:
+   - reconstruye el pipeline de datos del Ejercicio 01 (dataset, target,
+     `preprocess`, partición train/test)
+   - entrena y mide seis configuraciones de modelos con tres repeticiones
+     cada una
+   - compara SVM con y sin PCA
+   - genera dos mapas t-SNE con semillas distintas
+   - calcula la frontera de Pareto (F1 macro vs. tiempo de ajuste)
+   - grafica y cuantifica la decisión final
+
+2. Correr las pruebas de la frontera de Pareto:
+```bash
+   $env:PYTHONPATH="src"
+   python -m pytest -q
+```
+
+### Conclusión — Decisión sobre la frontera de Pareto
+
+El modelo con mayor F1 macro fue **HistGradientBoostingClassifier**
+(`boost`), con un valor de **0.8122**, superando a la regresión logística
+(0.7875), a ambas configuraciones de SVM (0.7859 y 0.7835) y a los dos
+Random Forest (0.7695 y 0.7686). Además de tener el mejor desempeño,
+`boost` fue también uno de los modelos más rápidos de ajustar, con una
+mediana de **2.75 segundos** frente a los **610.85 segundos** (~10.2
+minutos) de `svm_c10` y los **375.42 segundos** (~6.3 minutos) de
+`svm_c1`. Esto lo convierte en el modelo dominante de la frontera de
+Pareto: ningún otro modelo lo supera simultáneamente en F1 y en costo de
+entrenamiento.
+
+**Alternativa seleccionada:** `boost` (HistGradientBoostingClassifier). No
+solo alcanza el mejor F1 macro, sino que su costo computacional es
+prácticamente despreciable frente a las alternativas más lentas, lo que lo
+hace la elección más razonable bajo un criterio de Green AI (máximo
+desempeño con mínimo consumo de recursos).
+
+**Diferencia absoluta de F1** respecto a la segunda mejor alternativa
+(`svm_c10`, con 0.7859): **0.0263 puntos** de F1 macro. Es una diferencia
+modesta en desempeño, pero la comparación de costo la vuelve irrelevante en
+la práctica.
+
+**Porcentaje de ahorro temporal:** comparando `boost` (2.75 s) contra
+`svm_c10` (610.85 s), el ahorro es de aproximadamente **99.5%** en tiempo
+de ajuste. Incluso contra la SVM más económica (`svm_c1`, 375.42 s), el
+ahorro sigue siendo de **99.3%**. Esta diferencia se sostiene también en
+tiempo de inferencia: `boost` predice en 116.9 ms frente a los 13 672 ms
+de `svm_c10` y los 11 843 ms de `svm_c1` — casi dos órdenes de magnitud
+más lento.
+
+**Diferencia de tamaño en disco:** el modelo `boost` serializado ocupa
+363.99 KB, considerablemente menor que las SVM (7 746.5 KB para `svm_c10`
+y 7 603.66 KB para `svm_c1`), aunque mayor que `logistic` (7.99 KB). El
+tamaño de `boost` es razonable para despliegue, sin acercarse a la huella
+de las SVM.
+
+**Limitaciones:** la comparación se hizo con una sola partición de
+entrenamiento/prueba y sin búsqueda exhaustiva de hiperparámetros para
+cada familia de modelos (por ejemplo, no se probaron distintos valores de
+`learning_rate` o `max_iter` para `boost`, ni un rango más amplio de `C` y
+`gamma` para las SVM), por lo que los resultados reflejan configuraciones
+razonables pero no necesariamente óptimas de cada algoritmo. La mediana de
+tiempo se calculó con solo tres repeticiones, lo que limita la robustez de
+la estimación de varianza en el tiempo de ajuste, especialmente para
+modelos con mayor variabilidad como las SVM.
+
+**Contexto de hardware:** las mediciones se realizaron en un equipo local
+(no en un servicio en la nube ni en un entorno estandarizado de
+benchmarking), por lo que los tiempos absolutos pueden variar en otro
+hardware; sin embargo, la relación de órdenes de magnitud entre `boost` y
+las SVM es lo suficientemente amplia como para esperar que la conclusión
+se mantenga en la mayoría de los entornos de cómputo disponibles para este
+curso.
+
 ## Evidencias
 
 - Ficha de procedencia/licencia: [`docs/ficha_dataset.md`](docs/ficha_dataset.md)
 - Diccionario de datos: incluido en `docs/ficha_dataset.md`
-- Notebook completo: [`notebooks/02_svm_uci.ipynb`](notebooks/02_svm_uci.ipynb)
+- Notebooks completos:
+  [`notebooks/02_svm_uci.ipynb`](notebooks/02_svm_uci.ipynb),
+  [`notebooks/03_ensambles_green_ai.ipynb`](notebooks/03_ensambles_green_ai.ipynb)
 - Pruebas del contrato de datos: [`tests/test_data_contract.py`](tests/test_data_contract.py)
-- Resultados de validación cruzada: [`reports/svm_cv_results.csv`](reports/svm_cv_results.csv)
-- Modelo entrenado: [`reports/svm_best.joblib`](reports/svm_best.joblib)
+- Pruebas de la frontera de Pareto: [`tests/test_green.py`](tests/test_green.py)
+- Resultados de validación cruzada (LAB02): [`reports/svm_cv_results.csv`](reports/svm_cv_results.csv)
+- Resultados comparativos y Pareto (LAB03): [`reports/green_ai_results.csv`](reports/green_ai_results.csv)
+- Mapas t-SNE: [`reports/tsne_two_seeds.png`](reports/tsne_two_seeds.png)
+- Gráfico de la frontera de Pareto: [`reports/pareto.png`](reports/pareto.png)
+- Modelo entrenado (LAB02): [`reports/svm_best.joblib`](reports/svm_best.joblib)
+- Modelos serializados (LAB03): `reports/models/*.joblib`
+- Función de la frontera de Pareto: [`src/inf8239_u01/green.py`](src/inf8239_u01/green.py)
 
-## Conclusión
+## Notas de seguridad
 
-Este laboratorio permitió llevar el pipeline de clasificación con SVM del
-LAB01 —construido sobre un dataset guiado y ya limpio— a un escenario más
-realista: elegir, justificar, descargar y auditar un dataset público desde
-cero. El dataset elegido fue Adult Census Income, publicado en Kaggle por
-UCI Machine Learning, cuya tarea es predecir si el ingreso anual de una
-persona supera los 50 000 USD a partir de variables demográficas y laborales
-del censo de 1994 de Estados Unidos. Se validó que cumplía los criterios de
-aceptación del laboratorio: más de 30 000 filas, un target binario
-(`income`) con clases claramente observables, y una licencia CC BY 4.0 que
-permite su uso académico con atribución.
-
-Encapsular la descarga en `src/inf8239_u01/data.py`, en vez de depender de
-una ruta local o de una carpeta de Google Drive, fue uno de los aprendizajes
-más prácticos del proceso. El primer intento, usando una URL directa de la
-ficha de Kaggle con `pd.read_csv`, falló porque Kaggle no permite descargas
-directas de esa forma. Resolverlo implicó entender la diferencia entre
-`kagglehub` (que sí permite descargar datasets públicos sin credenciales) y
-la API oficial de `kaggle` (que siempre las exige), y ajustar la función para
-que el archivo quedara reproduciblemente ubicado en `data/raw`, sin rutas
-absolutas ni dependencias de una máquina en particular.
-
-La auditoría del dataset —tipos de dato, valores ausentes, duplicados y
-balance de clases— confirmó que `income` está desbalanceado hacia la clase
-`<=50K`, lo que justificó usar F1 macro como métrica principal en lugar de
-accuracy, ya que esta última puede resultar engañosamente alta si el modelo
-simplemente predice siempre la clase mayoritaria. Comparar la SVM contra un
-`DummyClassifier` como línea base permitió confirmar que el modelo aprende
-un patrón real y no solo repite la clase dominante del desbalance.
-
-Definir el target y evaluar posibles fugas de información también resultó
-relevante para este dataset en particular: variables como `fnlwgt` (un peso
-muestral del censo, no una característica real de la persona) y la
-redundancia entre `education` y `education-num` obligaron a pensar qué
-información está legítimamente disponible al momento de predecir, en lugar
-de incluir todo lo que mejora la métrica sin justificación. Encapsular el
-preprocesamiento (imputación, escalado, codificación one-hot) dentro de un
-`ColumnTransformer` integrado al `Pipeline`, en vez de aplicarlo directamente
-sobre el DataFrame completo, evitó fugas de información adicionales, ya que
-el ajuste de esas transformaciones ocurre únicamente sobre el conjunto de
-entrenamiento. En conjunto, el laboratorio deja como aprendizaje central que
-la calidad de un modelo sobre Adult Census Income depende tanto de las
-decisiones tomadas antes de tocar el algoritmo —procedencia, licencia,
-definición de target, tratamiento de fugas— como del ajuste de
-hiperparámetros en sí.
+El archivo `.kaggle/kaggle.json` contiene credenciales personales y **no debe
+subirse al repositorio**. Está excluido vía `.gitignore`.
