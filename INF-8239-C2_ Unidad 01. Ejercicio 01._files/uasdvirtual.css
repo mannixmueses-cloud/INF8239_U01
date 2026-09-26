@@ -1,0 +1,868 @@
+body{
+    background-color: #f3f3f3 !important;    
+    border-top: 1px solid #2f468c;
+}
+
+
+#page { 
+    margin-top: 15px;
+    transition: all 0.2s ease-in-out; 
+}
+
+
+.drawer-open-left #page { margin-left: 315px;}
+
+[data-region="drawer"] {
+    padding-left: 60px;
+    padding-right: 5px;
+    width: 315px;
+    margin-top: 183px;
+    padding-top: 0px !important;
+    height: calc(100% - 30px);
+}
+
+#page-course-view-uasdvirtual [data-region="drawer"] { 
+    margin-top: 413px; 
+}
+
+#nav-drawer.closed {
+    left: -385px;
+}
+
+#page-grade-report-user-index a.gradeitemheader{
+   display:none;
+}
+
+@media(max-width: 565px){
+    .drawer-open-left #page { margin-left: 1px!important;}
+    .page-header-headings h1{font-size: 22px !important;}
+    nav.navbar {
+        padding-left: 15px !important;
+        padding-right: 10px !important;
+    }    
+    nav.navbar {
+        padding-left: 18px;
+        padding-right: 8px;
+    }
+    
+    #uasdvirtual_header{
+        background-position: -540px !important; 
+    }
+}
+
+@media (max-width: 768px) {         
+    .uasdvirtual_img_course{ background-position: right;}
+    .single-section h3.sectionname{
+        padding: 0px !important;
+        padding-bottom: 15px !important;
+    }
+    ul.uasdvirtual{ padding: 0px !important;}    
+    ul.uasdvirtual .content{
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+    ul.uasdvirtual .content .section{ margin: 0px !important;}
+    ul.uasdvirtual .content .section .activity > div { padding: 0px !important; }    
+    .section .label .contentwithoutlink, .section .label .activityinstance{
+        padding-right: 5px !important;
+        padding-left: 10px !important;
+    }
+
+    #uasdvirtual_header { 
+        padding: 15px 0px !important;
+        background-size: cover !important; 
+        background-repeat: no-repeat !important;
+    }  
+    #uasdvirtual_header .col-sm-6{padding:0px !important;}
+    #uasdvirtual_header  img{
+        width: 100%;
+        margin-top: 10px;    
+    }
+    .drawer-open-left #page-course-view-uasdvirtual [data-region="drawer"] {
+        margin-top: 152px !important;
+    }
+    .is-nav-fixed-top #page-course-view-uasdvirtual [data-region="drawer"] {
+        margin-top: -26px !important;
+    }
+    #page-wrapper #page {
+        margin-top: 20px !important;
+    }
+}
+
+@media (max-width: 768px) and (min-width: 559px){
+    nav.navbar {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }    
+    #uasdvirtual_header{
+        background-position: -463px !important;
+    }
+}
+
+@media (min-width: 768px) {
+    body.drawer-open-left {margin-left: 0px; } 
+    body.drawer-open-right {margin-right: 285px; }      
+}
+
+@media (min-width: 570px) and (max-width: 1040px) {
+    body:not(.drawer-open-left) #page{ max-width: 98%; }
+}
+
+
+@media (max-width: 1030px) {
+    .navbar  li.dropdown.nav-item{
+        display:none;
+    }
+}
+  
+@media (min-width: 1350px) and (max-width: 1440px) {
+    .drawer-open-left #page{margin-left: 325px;}
+    [data-region="drawer"] {
+        padding-left: 60px;
+        padding-right: 5px;
+        width: 315x;
+    }
+} 
+
+  
+@media (min-width: 1441px){
+    .drawer-open-left #page{margin-left: 370px;}    
+    [data-region="drawer"] {
+        padding: 15px;        
+        padding-right: 5px;
+        width: 360px;
+        padding-left: 60px;
+    }
+} 
+
+#uasdvirtual_header{    
+    height:150px;
+    padding: 15px 30px;
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/bg-uasd-virtual.png);
+    background-position: left;    
+    background-color: #f3f3f3;
+    margin-bottom: 2px;
+}
+
+nav.navbar{
+    padding-left: 60px;
+    padding-right: 60px;
+    background-color: #fbfbfb !important;
+    color: #1749a0 !important;
+    /*margin-top: 2px;*/
+}
+
+nav .usermenu .dropdown > a, nav .usertext{
+    color: #144c99;
+    padding-right: 7px;
+} 
+
+/*
+.navbar-light .navbar-brand {
+    color: rgba(255, 255, 255, 0.9) !important;
+}*/
+.bg-opacity{
+    width:100%;
+    height:100%;
+    background-color: rgba(0, 0, 0, 0.16862745098039217);
+}
+nav.navbar .bg-gray {
+    background-color: rgb(46, 123, 208)!important;
+    border: 0px;
+    color: white;
+    border-radius: 8px;
+}
+/*
+.navbar-light .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.65) !important;
+}*/
+
+#uasdvirtual_header ._content{
+    padding-top:5px;
+}
+
+#uasdvirtual_header ._content ._img{
+    float:left;
+    padding-right: 10px;
+}
+
+#uasdvirtual_header ._content ._text{
+    padding-top: 6px;
+}
+
+#uasdvirtual_header ._content ._text ._title{
+    font-family: time_roman;
+    color: #2f468c;
+    font-size: 28px;
+    font-weight: bold;
+    line-height: 1.1;
+}
+
+#uasdvirtual_header ._content ._text ._label_main{
+    font-style: italic;
+    font-weight: bold;
+    font-size: 20px;
+    color: #2f468c;
+}
+
+#uasdvirtual_header ._content ._text ._label_text{
+    color: #2f468c;
+    line-height: 1.2;
+}
+
+.uasdvirtual_img_course{
+    height: 230px;
+    transition: overflow 0 2s;  
+}
+
+.my-scroll{overflow: auto;}
+.my-scroll.hidden-scroll{overflow: hidden !important;}
+.my-scroll:hover{overflow: auto !important;}
+
+
+.my-scroll::-webkit-scrollbar {
+    width: 4px;
+    height: 8px;
+  }
+.my-scroll::-webkit-scrollbar-button {
+width: 0px;
+height: 0px;
+}
+.my-scroll::-webkit-scrollbar-thumb {
+background: #b9b9b9;
+border: 0px none #ffffff;
+border-radius: 50px;
+}
+.my-scroll::-webkit-scrollbar-thumb:hover {
+background: #8a95b7;
+}
+.my-scroll::-webkit-scrollbar-thumb:active {
+background: #8a95b7;
+}
+.my-scroll::-webkit-scrollbar-track {
+background: #dedede;
+border: 0px none #ffffff;
+border-radius: 50px;
+}
+.my-scroll::-webkit-scrollbar-track:hover {
+background: #dedede;
+}
+.my-scroll::-webkit-scrollbar-track:active {
+background: #dedede;
+}
+.my-scroll::-webkit-scrollbar-corner {
+background: transparent;
+}
+
+.my-scroll:hover::-webkit-scrollbar {
+    width: 4px;
+    height: 8px;
+  }
+.my-scroll:hover::-webkit-scrollbar-button {
+width: 0px;
+height: 0px;
+}
+.my-scroll:hover::-webkit-scrollbar-thumb {
+background: #b9b9b9;
+border: 0px none #ffffff;
+border-radius: 50px;
+}
+.my-scroll:hover::-webkit-scrollbar-thumb:hover {
+background: #8a95b7;
+}
+.my-scroll:hover::-webkit-scrollbar-thumb:active {
+background: #8a95b7;
+}
+.my-scroll:hover::-webkit-scrollbar-track {
+background: #dedede;
+border: 0px none #ffffff;
+border-radius: 50px;
+}
+.my-scroll:hover::-webkit-scrollbar-track:hover {
+background: #dedede;
+}
+.my-scroll:hover::-webkit-scrollbar-track:active {
+background: #dedede;
+}
+.my-scroll:hover::-webkit-scrollbar-corner {
+background: transparent;
+}
+
+.context-header-settings-menu .dropdown-toggle>.icon, #region-main-settings-menu .dropdown-toggle>.icon {    
+    font-size: 32px;
+}
+.single-section h3.sectionname {
+    text-align: left;
+    clear: both;
+    padding-left: 46px;
+    color: #2e77d1;
+}
+
+.path-mod-assign .submissionsummarytable .c0, .path-mod-assign .mod-assign-history-panel .c0 {
+    width: 235px;
+}
+
+.course-content .single-section .section-navigation .mdl-left,
+.course-content .single-section .section-navigation .mdl-right,
+.discussion-nav .prev-discussion,
+.discussion-nav .next-discussion,
+.activity-navigation{ 
+    display:none;
+}
+
+/* Forum */
+.back-forum{    
+    font-size: 20px;
+    margin-left: 2px;
+}
+
+
+/* Utilities */
+
+.summary h3 b{
+    font-size: 48px;
+}
+
+.single-section h3.sectionname a,
+.single-section h3.sectionname span{
+    font-size: 38px;
+    text-transform: uppercase;    
+    text-transform: uppercase;
+    color:#1177d1;
+}
+
+.section .label .mod-indent-outer {
+    padding-left: 0px;
+    display: block;
+}
+
+.course-content ul.section {
+    margin-left: 0px;
+    padding-left: 0px;
+}
+
+
+.format-uasdvirtual li#section-0  h3.sectionname{ margin-bottom: 24px;}
+.format-uasdvirtual li#section-0  h3.sectionname span{ display: none;}
+
+.editinstructions {
+    font-size: 16px !important; 
+}
+
+
+/* FACULTADES STYLE */
+.format-uasdvirtual header#page-header .header-course{ padding-bottom: 0px !important;}
+header#page-header .card{
+    border-bottom:0px;
+}
+.format-uasdvirtual .header-course  .card .card-body{
+    border-bottom: 0px !important;
+    background: #fbfbfb;
+    margin-left: -1px;
+    margin-right: -1px;
+    border: 1px solid #dfdfdf;
+}
+.header-course .img-full-header{
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    height: 85px;
+    width: 78px;
+    float: left;
+    margin-right: 12px;
+    opacity: 0.6;
+}
+
+.Facultad- #nav-drawer .list-group:first-child ul li:first-child a {
+    background: #0f48a0;
+    color: white;
+    border: none;
+}
+
+.list-group-item.active{
+    color: #1177d2;
+    background-color: #ebf6ff;
+    border-color: #c4dcf1;
+}
+
+.Facultad- header#page-header .card .card-body{
+    border-top: 6px solid #000080;
+}
+
+.Facultad- .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/logo.png);
+}
+
+#nav-drawer .media-body a{ color:#495057; }
+
+a.list-group-item.list-group-item-action[data-hidden="1"] .media {
+    opacity: 0.4;
+}
+
+/*Ciencias */
+.Facultad-CI .summary b,
+.Facultad-CI .single-section h3.sectionname a,
+.Facultad-CI .single-section h3.sectionname span,
+.Facultad-CI .single-section .content b{color: #3d8fd1;}
+
+.Facultad-CI #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #3d8fd1 !important;
+    color: white;
+}
+
+.Facultad-CI #nav-drawer .list-group-item.active,
+.Facultad-CI #nav-drawer .list-group-item.active span a {
+    z-index: 2;
+    color: #3d8fd1;
+    background-color: #e2f2ff;
+    border-color: #d1e3f1;
+}
+.Facultad-CI header#page-header .card .card-body{
+    border-top: 6px solid #3d8fd1;
+}
+
+.Facultad-CI .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/ciencias.png);
+}
+
+
+/*Educacion */
+.Facultad-CE .summary b,
+.Facultad-CE .single-section h3.sectionname a,
+.Facultad-CE .single-section h3.sectionname span,
+.Facultad-CE .single-section .content b{color: #79111e;}
+
+.Facultad-CE #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #79111e !important;
+    color: white;
+}
+
+.Facultad-CE #nav-drawer .list-group-item.active {
+    z-index: 2;
+    color: #79111e;
+    background-color: #fff0f2;
+    border-color: #efd5d8;
+}
+.Facultad-CE header#page-header .card .card-body{
+    border-top: 6px solid #79111e;
+}
+
+.Facultad-CE .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/eduacacion.png);
+}
+
+
+
+/*Humanidades */
+.Facultad-HU .summary b,
+.Facultad-HU .single-section h3.sectionname a,
+.Facultad-HU .single-section h3.sectionname span,
+.Facultad-HU .single-section .content b{color: #792f8c;}
+
+.Facultad-HU #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #792f8c !important;
+    color: white;
+}
+
+.Facultad-HU #nav-drawer .list-group-item.active {
+    z-index: 2;
+    color: #792f8c;
+    background-color: #f2e8f0;
+    border-color: #eac8e4;
+}
+.Facultad-HU header#page-header .card .card-body{
+    border-top: 6px solid #792f8c;
+}
+
+.Facultad-HU .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/humanidades.png);
+}
+
+
+a.list-group-item.list-group-item-action[data-hidden="1"] .media {
+    opacity: 0.4;
+}
+
+/*Artes */
+.Facultad-AR .summary b,
+.Facultad-AR .single-section h3.sectionname a,
+.Facultad-AR .single-section h3.sectionname span,
+.Facultad-AR .single-section .content b{color: #c7a75d;}
+
+.Facultad-AR #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #c7a75d !important;
+    color: white;
+}
+
+.Facultad-AR #nav-drawer .list-group-item.active,
+.Facultad-AR #nav-drawer .list-group-item.active span a {
+    z-index: 2;
+    color: #b1924a;
+    background-color: #eee5d0;
+    border-color: #f3d6c6;
+}
+.Facultad-AR header#page-header .card .card-body{
+    border-top:6px solid #b1924a;
+}
+
+.Facultad-AR .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/artes.png);
+}
+
+
+/*Agronomia */
+.Facultad-AG .summary b,
+.Facultad-AG .single-section h3.sectionname a,
+.Facultad-AG .single-section h3.sectionname span,
+.Facultad-AG .single-section .content b{color: #199844 ;}
+
+.Facultad-AG #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #199844  !important;
+    color: white;
+}
+
+.Facultad-AG #nav-drawer .list-group-item.active,
+.Facultad-AG #nav-drawer .list-group-item.active span a {
+    z-index: 2;
+    color: #199844;
+    background-color: #e1f3e8;
+    border-color: #b4e0c6;
+}
+.Facultad-AG header#page-header .card .card-body{
+    border-top:6px solid #199844;
+}
+
+.Facultad-AG .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/agronomia.png);
+}
+
+/*Economia */
+.Facultad-ES .summary b,
+.Facultad-ES .single-section h3.sectionname a,
+.Facultad-ES .single-section h3.sectionname span,
+.Facultad-ES .single-section .content b{color: #ec893f ;}
+
+.Facultad-ES #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #e68842  !important;
+    color: white;
+}
+
+.Facultad-ES #nav-drawer .list-group-item.active,
+.Facultad-ES #nav-drawer .list-group-item.active span a {
+    z-index: 2;
+    color: #d48042;
+    background-color: #fff1e6;
+    border-color: #ffd6b8;
+}
+.Facultad-ES header#page-header .card .card-body{
+    border-top:6px solid #ec893f;
+}
+
+.Facultad-ES .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/economia.png);
+}
+
+/*Salud */
+.Facultad-SA .summary b,
+.Facultad-SA .single-section h3.sectionname a,
+.Facultad-SA .single-section h3.sectionname span,
+.Facultad-SA .single-section .content b{color: #a5a14c ;}
+
+.Facultad-SA #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #f1ec88;
+    color: #a5a14c;
+}
+
+.Facultad-SA #nav-drawer .list-group-item.active,
+.Facultad-SA #nav-drawer .list-group-item.active span a {
+    z-index: 2;
+    color: #a5a14c;
+    background-color: #fffff1;
+    border-color: #e8e6bd;
+}
+.Facultad-SA header#page-header .card .card-body{
+    border-top:6px solid #eae57f;
+}
+
+.Facultad-SA .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/salud.png);
+}
+
+/*Ingenieria */
+.Facultad-IN .summary b,
+.Facultad-IN .single-section h3.sectionname a,
+.Facultad-IN .single-section h3.sectionname span,
+.Facultad-IN .single-section .content b{color: #0061b6 ;}
+
+.Facultad-IN #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #0061b6;
+    color: #ffffff;
+}
+
+.Facultad-IN #nav-drawer .list-group-item.active,
+.Facultad-IN #nav-drawer .list-group-item.active span a {
+    z-index: 2;
+    color: #0061b6;
+    background-color: #f4faff;
+    border-color: #daebf9;
+}
+.Facultad-IN header#page-header .card .card-body{
+    border-top:6px solid #0061b6;
+}
+
+.Facultad-IN .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/ingenieria.png);
+}
+
+/*Juridica */
+.Facultad-JU .summary b,
+.Facultad-JU .single-section h3.sectionname a,
+.Facultad-JU .single-section h3.sectionname span,
+.Facultad-JU .single-section .content b{color: #e4665c ;}
+
+.Facultad-JU #nav-drawer .list-group:first-child ul li:first-child a {
+    background-color: #e4665c;
+    color: #ffffff;
+}
+
+.Facultad-JU #nav-drawer .list-group-item.active,
+.Facultad-JU #nav-drawer .list-group-item.active span a {
+    z-index: 2;
+    color: #e4665c;
+    background-color: #fff2f0;
+    border-color: #e4c7c5;
+}
+.Facultad-JU header#page-header .card .card-body{
+    border-top:6px solid #e4665c;
+}
+
+.Facultad-JU .img-full-header{
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/pix/facultades/juridica.png);
+}
+
+/* Editing Course */
+body.isEditing .course-content li .activityinstance > a{
+    float: left;
+    margin-right: 7px
+}
+body.isEditing .course-content li .activityinstance > i,
+body.isEditing .change-visibility{ cursor: pointer; }
+body.isEditing .course-content li .activityinstance > i{margin-top: 5px;}
+body.isEditing .change-visibility{float:right;}
+body.isEditing .change-visibility.ishidden{opacity: 0.4;}
+body.isEditing .change-visibility:hover {cursor: grabbing;}
+
+input.quickgrade{ max-width: 50px;}
+
+[data-key="mycourses"]:hover{
+    cursor: pointer;
+    background: rgb(234, 248, 255)!important;
+}
+
+/* My Modal */
+.my-modals-bg{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: hsla(0, 0%, 0%, 0.61);
+    z-index: 9999999;
+}
+
+.my-modals{
+    position: fixed;
+    width: 500px;
+    min-height: 120px;
+    z-index: 99999999;
+    margin-top: 78px;
+}
+
+.my-modal-header{
+    background: #00a1e6;
+    padding: 15px;
+    font-size: 18px;
+    border-bottom: 1px solid #c3c3c3;
+    color: white;
+}
+
+.my-modal-header-close{
+    float: right;
+    font-weight: bold;
+    color: #fdfdfd;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.my-modal-body{
+    padding: 20px;
+    background: white;
+    max-height: 350px;
+    overflow-y: auto;
+}
+
+.my-modal-footer{
+    text-align: right;
+    background: #F2f2f2;
+    padding: 10px;
+    border-top: 1px solid #d8d8d8;
+}
+
+.my-modal-footer button{ margin-left:12px }
+/* End Modal */
+
+.my-modals .collapsible legend:hover {
+    cursor: pointer;
+    background: #f9f9f9 !important;
+}
+
+.change_activity_date{
+    width:660px !important;
+    margin-left: 29% !important;
+}
+
+.collapsible-actions {
+    margin-bottom: -25px;
+}
+
+.change_activity_date legend{ color: #1177d1 !important;}
+.change_activity_date legend i{ color: #5cb85c !important;}
+
+.change_activity_date .collapsible legend:after {
+    content: "\25bc";
+    float: right;
+    color: #999999;
+    font-size: 12px;
+    padding-top: 7px;
+}
+
+.change_activity_date .collapsible.collapsed legend:after {
+    content: "\25b6";
+    float: right;
+    color: #999999;
+    font-size: 12px;
+    padding-top: 7px;
+}
+
+.change_activity_date #id_availability_  legend:after {
+    content: "" !important;
+}
+
+.my-modals .collapseexpand,
+.my-modals .form-check-input,
+.my-modals .collapsible legend{cursor:pointer;}
+
+
+/* Login */
+body#page-login-index {
+    border-top:none !important;
+    background-image: url(https://uasdvirtual.uasd.edu.do/theme/uasdvirtual/images/bckground_uasd-virtual-optimized.jpg);    
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+ 
+#page-login-index  .logo {
+    width: 100%;
+    /*max-width: 889px;*/
+    padding: 38px;
+    margin: 0 auto;
+    margin-top: 5px;
+}
+
+#page-login-index  .contaniner-login {
+    width: 100%;
+    max-width: 1160px;
+    max-height: 575px;
+    margin: 0 auto;
+    border-radius: 15px;
+    box-shadow: 0px 15px 15px rgba(0,29,86, .16);
+    overflow: hidden;
+  }  
+  
+#page-login-index .blue-back-left {
+    position: relative;
+    height: 575px;
+    border-radius: 15px 0 0 15px;
+    background: rgb(0,163,230);
+    background: linear-gradient(9deg, rgba(0,163,230,1) 0%, rgba(0,119,213,0.9023984593837535) 100%);
+    padding-top:60px;
+}
+
+#page-login-index .logo-uasd-virtual{ padding-left:20px}
+
+#page-login-index #region-main .col-md-5,
+#page-login-index #region-main .col-sm-8,
+#page-login-index #region-main   .col-sm-6,
+#page-login-index #region-main   .col-md-5{
+    width: 100%;
+    flex: none;
+    max-width: 100%;
+}
+
+#page-login-index h2.card-header,#page-login-index .my-sm-5{ display:none;}
+#page-login-index .white-right{ background-color: white;}
+#page-login-index .white-content h1{    
+    margin-top: 60px;
+    margin-left: 50px;    
+    color: #0077d5;
+}
+#page-login-index #region-main{
+    padding-top: 0px;
+}
+
+#page-login-index .card{
+    border: 0px;
+    padding-left: 10px;
+}
+
+#page-login-index input[type="text"]{
+    margin-bottom: 25px;
+}
+
+#page-login-index input[type="text"],
+#page-login-index input[type="password"]{
+    height: 50px;
+    border-radius: 5px;
+    font-size: 20px;
+}
+
+#page-login-index button.btn-primary{
+    border-radius: 30px;
+    width: 125px;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: BOLD;    
+}
+
+.show-mobil{display: none;}
+@media (max-width: 768px) {    
+    #page-login-index .blue-back-left{ display:none; }
+    #page-login-index .contaniner-login{width:92%}
+    .show-mobil{display: block;}
+    .hide-mobil{display: none;}
+    #page-login-index .logo {padding-top: 15px;}
+    .indent  .content-post-actions .post-actions{ display:flex !important;}
+    .post-actions .icon { opacity:.7 !important;}
+    .post-actions .icon:active { opacity:1 !important;}    
+}
+
+.author-groups-container{ display:none}
+.content-post-actions{ min-height: 40px;}
+.indent  .content-post-actions .post-actions{ display:none}
+.indent .forumpost:hover .post-actions{ display:flex !important;} 
+.post-actions .icon {
+    opacity: .3;
+    color: white;
+    padding: 5px;
+    border-radius: 20px;
+}
+.post-actions a.btn {padding: 0px;}
+.content-post-actions .post-actions .icon:hover {opacity: 1;}
+.content-post-actions .post-actions .icon{ background: rgba(204, 204, 204, 0.933); }
+.content-post-actions .post-actions .icon.fa-link{ background: #125f96; }
+.content-post-actions .post-actions .icon.fa-arrow-left{ background: #1d55ab;}
+.content-post-actions .post-actions .icon.fa-pencil{ background: #459612;}
+.content-post-actions .post-actions .icon.fa-trash{ background: #d0362a;}
+.content-post-actions .post-actions .icon.fa-reply{ background: #1177d3;}
+
+.postratingform .ratingform {
+    background: #fff9f8;
+    padding-left: 7px;
+}

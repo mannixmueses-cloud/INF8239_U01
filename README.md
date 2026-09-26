@@ -21,7 +21,7 @@ repositorio contiene las evidencias de los ejercicios de la unidad:
 - **Partición:** 80/20, estratificada, `random_state=42` (misma para
   LAB02 y LAB03, sin modificar para favorecer ningún modelo)
 - **Ficha completa de procedencia, comparación de candidatos y criterios de
-  aceptación:** [`docs/ficha_dataset.md`](docs/ficha_dataset.md)
+  aceptación:** [`ficha_dataset.md`](ficha_dataset.md)
 
 ## Estructura del proyecto
 
@@ -227,7 +227,7 @@ curso.
 
 ## Evidencias
 
-- Ficha de procedencia/licencia: [`docs/ficha_dataset.md`](docs/ficha_dataset.md)
+- Ficha de procedencia/licencia: [`docs/ficha_dataset.md`](ficha_dataset.md)
 - Diccionario de datos: incluido en `docs/ficha_dataset.md`
 - Notebooks completos:
   [`notebooks/02_svm_uci.ipynb`](notebooks/02_svm_uci.ipynb),
